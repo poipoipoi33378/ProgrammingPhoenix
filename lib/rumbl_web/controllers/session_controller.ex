@@ -3,7 +3,13 @@ defmodule RumblWeb.SessionController do
 
   def new(conn, _) do
     render(conn, "new.html")
-  end 
+  end
+  
+  def delete(conn, _) do
+    conn
+    |> RumblWeb.Auth.logout()
+    |> redirect(to: Routes.page_path(conn, :index))
+  end
 
   def create(
     conn, 
