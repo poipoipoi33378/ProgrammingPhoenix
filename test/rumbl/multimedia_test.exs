@@ -6,9 +6,9 @@ defmodule Rumbl.MultimediaTest do
   describe "videos" do
     alias Rumbl.Multimedia.Video
 
-    @valid_attrs %{descriotion: "some descriotion", title: "some title", url: "some url"}
-    @update_attrs %{descriotion: "some updated descriotion", title: "some updated title", url: "some updated url"}
-    @invalid_attrs %{descriotion: nil, title: nil, url: nil}
+    @valid_attrs %{description: "some description", title: "some title", url: "some url"}
+    @update_attrs %{description: "some updated description", title: "some updated title", url: "some updated url"}
+    @invalid_attrs %{description: nil, title: nil, url: nil}
 
     def video_fixture(attrs \\ %{}) do
       {:ok, video} =
@@ -31,7 +31,7 @@ defmodule Rumbl.MultimediaTest do
 
     test "create_video/1 with valid data creates a video" do
       assert {:ok, %Video{} = video} = Multimedia.create_video(@valid_attrs)
-      assert video.descriotion == "some descriotion"
+      assert video.description == "some description"
       assert video.title == "some title"
       assert video.url == "some url"
     end
@@ -43,7 +43,7 @@ defmodule Rumbl.MultimediaTest do
     test "update_video/2 with valid data updates the video" do
       video = video_fixture()
       assert {:ok, %Video{} = video} = Multimedia.update_video(video, @update_attrs)
-      assert video.descriotion == "some updated descriotion"
+      assert video.description == "some updated description"
       assert video.title == "some updated title"
       assert video.url == "some updated url"
     end

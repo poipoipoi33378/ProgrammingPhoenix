@@ -5,7 +5,7 @@
     <tr>
       <th>Url</th>
       <th>Title</th>
-      <th>Descriotion</th>
+      <th>Description</th>
 
       <th></th>
     </tr>
@@ -15,7 +15,7 @@
     <tr>
       <td><%= video.url %></td>
       <td><%= video.title %></td>
-      <td><%= video.descriotion %></td>
+      <td><%= video.description %></td>
 
       <td>
         <span><%= link "Show", to: Routes.video_path(@conn, :show, video) %></span>

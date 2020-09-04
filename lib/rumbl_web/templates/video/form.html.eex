@@ -13,9 +13,9 @@
   <%= text_input f, :title %>
   <%= error_tag f, :title %>
 
-  <%= label f, :descriotion %>
-  <%= textarea f, :descriotion %>
-  <%= error_tag f, :descriotion %>
+  <%= label f, :description %>
+  <%= textarea f, :description %>
+  <%= error_tag f, :description %>
 
   <div>
     <%= submit "Save" %>

@@ -3,9 +3,9 @@ defmodule RumblWeb.VideoControllerTest do
 
   alias Rumbl.Multimedia
 
-  @create_attrs %{descriotion: "some descriotion", title: "some title", url: "some url"}
-  @update_attrs %{descriotion: "some updated descriotion", title: "some updated title", url: "some updated url"}
-  @invalid_attrs %{descriotion: nil, title: nil, url: nil}
+  @create_attrs %{description: "some description", title: "some title", url: "some url"}
+  @update_attrs %{description: "some updated description", title: "some updated title", url: "some updated url"}
+  @invalid_attrs %{description: nil, title: nil, url: nil}
 
   def fixture(:video) do
     {:ok, video} = Multimedia.create_video(@create_attrs)
@@ -60,7 +60,7 @@ defmodule RumblWeb.VideoControllerTest do
       assert redirected_to(conn) == Routes.video_path(conn, :show, video)
 
       conn = get(conn, Routes.video_path(conn, :show, video))
-      assert html_response(conn, 200) =~ "some updated descriotion"
+      assert html_response(conn, 200) =~ "some updated description"
     end
 
     test "renders errors when data is invalid", %{conn: conn, video: video} do
