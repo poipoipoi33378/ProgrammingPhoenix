@@ -12,10 +12,12 @@
   </thead>
   <tbody>
 <%= for video <- @videos do %>
+  <% video = Rumbl.Repo.preload(video, :user) %>
     <tr>
       <td><%= video.url %></td>
       <td><%= video.title %></td>
       <td><%= video.description %></td>
+      <td><%= if video.user == nil, do: "nil", else: video.user.username %></td>
 
       <td>
         <span><%= link "Show", to: Routes.video_path(@conn, :show, video) %></span>
