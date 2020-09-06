@@ -8,6 +8,6 @@ defmodule Rumbl.Repo.Migrations.CreateCategories do
       timestamps()
     end
 
-    crate unique_index(:categories,[:name])
+    create unique_index(:categories,[:name])
   end
 end
