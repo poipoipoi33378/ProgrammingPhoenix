@@ -50,6 +50,7 @@ defmodule Rumbl.Multimedia do
 
   """
   alias Rumbl.Accounts
+
   def create_video(%Accounts.User{} = user, attrs \\ %{}) do
     %Video{}
     |> Video.changeset(attrs)
@@ -129,6 +130,6 @@ defmodule Rumbl.Multimedia do
   def list_alpabetical_categories do
     Category
     |> Category.alpabetical()
-    |> Repo.all
+    |> Repo.all()
   end
 end
