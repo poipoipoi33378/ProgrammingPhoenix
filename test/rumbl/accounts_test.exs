@@ -44,8 +44,29 @@ defmodule Rumbl.AccountsTest do
       attrs = Map.put(@valid_attrs, :password, "12345")
       assert {:error, changeset} = Accounts.register_user(attrs)
 
-      assert %{username: ["should be at least 6 character(s)"] } = errors_on(changeset)
+      assert %{password: ["should be at least 6 character(s)"] } = errors_on(changeset)
       assert Accounts.list_users() == []
+    end
+  end
+
+  describe "authenticate_by_username_and_pass/2" do
+    @pass "123456"
+
+    setup do
+      {:ok, user: user_fixture(password: @pass)}
+    end
+
+    test "return user with correct password", %{user: user} do
+      assert {:ok, auth_user} = Accounts.authenticate_by_username_and_pass(user.username, @pass)
+      assert auth_user.id == user.id
+    end
+
+    test "retrun unauthoried error with invalid password", %{user: user} do
+      assert {:error, :unauthorized} = Accounts.authenticate_by_username_and_pass(user.username, "badpass")
+    end
+
+    test "return not found error with no matching user for email" do
+      assert {:error, :not_found} = Accounts.authenticate_by_username_and_pass("unkonwnuser", @pass)
     end
   end
 end
