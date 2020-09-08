@@ -1,6 +1,5 @@
 defmodule RumblWeb.VideoControllerTest do
   use RumblWeb.ConnCase, async: true
-
   alias Rumbl.Multimedia
 
   @create_attrs %{

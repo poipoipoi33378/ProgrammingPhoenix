@@ -16,7 +16,6 @@ defmodule RumblWeb.Auth do
       true ->
         assign(conn, :current_user, nil)
     end
-
   end
 
   def login(conn, user) do
