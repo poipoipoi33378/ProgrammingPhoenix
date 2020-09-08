@@ -101,8 +101,8 @@ defmodule Rumbl.Multimedia do
       %Ecto.Changeset{data: %Video{}}
 
   """
-  def change_video(%Video{} = video, attrs \\ %{}) do
-    Video.changeset(video, attrs)
+  def change_video(%Video{} = video) do
+    Video.changeset(video, %{})
   end
 
   def list_user_videos(%Accounts.User{} = user) do
