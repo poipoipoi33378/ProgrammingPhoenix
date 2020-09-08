@@ -1,6 +1,16 @@
 defmodule RumblWeb.VideoControllerTest do
   use RumblWeb.ConnCase, async: true
 
+  alias Rumbl.Multimedia
+
+  @create_attrs %{
+    url: "http://youtu.be",
+    title: "vip",
+    description: "a vip"
+  }
+  @invalid_attrs %{title: "invalid"}
+
+
   test "requires user authetication on all acctions", %{conn: conn} do
     Enum.each([
       get(conn, Routes.video_path(conn, :new)),
@@ -14,6 +24,30 @@ defmodule RumblWeb.VideoControllerTest do
       assert html_response(conn, 302)
       assert conn.halted
     end)
+  end
+
+  test "authorizes action aginst access by other users", %{conn: conn} do
+    owner = user_fixture(username: "owner")
+    video = video_fixture(owner, @create_attrs)
+
+    non_owner = user_fixture(username: "sneaky")
+    conn = assign(conn, :current_user, non_owner)
+
+    assert_error_sent :not_found, fn ->
+      get(conn, Routes.video_path(conn, :show, video))
+    end
+
+    assert_error_sent :not_found, fn ->
+      get(conn, Routes.video_path(conn, :edit, video))
+    end
+
+    assert_error_sent :not_found, fn ->
+      get(conn, Routes.video_path(conn, :update, video))
+    end
+
+    assert_error_sent :not_found, fn ->
+      get(conn, Routes.video_path(conn, :delete, video))
+    end
   end
 
   describe "with a logged-in user" do
@@ -36,15 +70,6 @@ defmodule RumblWeb.VideoControllerTest do
       assert String.contains?(conn.resp_body, user_video.title)
       refute String.contains?(conn.resp_body, other_video.title)
     end
-
-    alias Rumbl.Multimedia
-
-    @create_attrs %{
-      url: "http://youtu.be",
-      title: "vip",
-      description: "a vip"
-    }
-    @invalid_attrs %{title: "invalid"}
 
     defp video_count, do: Enum.count(Multimedia.list_videos())
 
