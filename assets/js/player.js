@@ -2,7 +2,7 @@ let Player = {
     player: null,
 
     init(domId, playerId, onReady){
-        window.onYouTubeframeAPIReady = () => {
+        window.onYouTubeIframeAPIReady = () => {
             this.onIframeReady(domId, playerId, onReady)
         }
         let youtubeScriptTag = document.createElement("script")
@@ -16,7 +16,7 @@ let Player = {
             width: "420",
             videoId: playerId,
             events: {
-                "onReady":  (event => onReady(event) ),
+                "onReady": (event => onReady(event) ),
                 "onStateChange": (event => this.onPlayerStateChange(event) )
             }
         })
