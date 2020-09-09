@@ -50,6 +50,7 @@ defmodule Rumbl.Multimedia do
 
   """
   alias Rumbl.Accounts
+
   def create_video(%Accounts.User{} = user, attrs \\ %{}) do
     %Video{}
     |> Video.changeset(attrs)
@@ -100,8 +101,8 @@ defmodule Rumbl.Multimedia do
       %Ecto.Changeset{data: %Video{}}
 
   """
-  def change_video(%Video{} = video, attrs \\ %{}) do
-    Video.changeset(video, attrs)
+  def change_video(%Video{} = video) do
+    Video.changeset(video, %{})
   end
 
   def list_user_videos(%Accounts.User{} = user) do
@@ -129,6 +130,6 @@ defmodule Rumbl.Multimedia do
   def list_alpabetical_categories do
     Category
     |> Category.alpabetical()
-    |> Repo.all
+    |> Repo.all()
   end
 end
