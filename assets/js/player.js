@@ -1,7 +1,7 @@
 let Player = {
     player: null,
 
-    init(domId, onReady){
+    init(domId, playerId, onReady){
         window.onYouTubeframeAPIReady = () => {
             this.onIframeReady(domId, playerId, onReady)
         }
