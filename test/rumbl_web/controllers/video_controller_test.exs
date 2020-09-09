@@ -9,20 +9,22 @@ defmodule RumblWeb.VideoControllerTest do
   }
   @invalid_attrs %{title: "invalid"}
 
-
   test "requires user authetication on all acctions", %{conn: conn} do
-    Enum.each([
-      get(conn, Routes.video_path(conn, :new)),
-      get(conn, Routes.video_path(conn, :index)),
-      get(conn, Routes.video_path(conn, :show, "123")),
-      get(conn, Routes.video_path(conn, :edit, "123")),
-      get(conn, Routes.video_path(conn, :update, "123", %{})),
-      get(conn, Routes.video_path(conn, :create, %{})),
-      get(conn, Routes.video_path(conn, :delete, "123"))
-    ], fn conn ->
-      assert html_response(conn, 302)
-      assert conn.halted
-    end)
+    Enum.each(
+      [
+        get(conn, Routes.video_path(conn, :new)),
+        get(conn, Routes.video_path(conn, :index)),
+        get(conn, Routes.video_path(conn, :show, "123")),
+        get(conn, Routes.video_path(conn, :edit, "123")),
+        get(conn, Routes.video_path(conn, :update, "123", %{})),
+        get(conn, Routes.video_path(conn, :create, %{})),
+        get(conn, Routes.video_path(conn, :delete, "123"))
+      ],
+      fn conn ->
+        assert html_response(conn, 302)
+        assert conn.halted
+      end
+    )
   end
 
   test "authorizes action aginst access by other users", %{conn: conn} do
@@ -50,7 +52,6 @@ defmodule RumblWeb.VideoControllerTest do
   end
 
   describe "with a logged-in user" do
-
     setup %{conn: conn, login_as: username} do
       user = user_fixture(username: username)
       conn = assign(conn, :current_user, user)
@@ -65,7 +66,7 @@ defmodule RumblWeb.VideoControllerTest do
 
       conn = get(conn, Routes.video_path(conn, :index))
       response = html_response(conn, 200)
-      assert response  =~ ~r/Listing Videos/
+      assert response =~ ~r/Listing Videos/
       assert String.contains?(conn.resp_body, user_video.title)
       refute String.contains?(conn.resp_body, other_video.title)
     end
@@ -74,13 +75,12 @@ defmodule RumblWeb.VideoControllerTest do
 
     @tag login_as: "max"
     test "creates user video and redirects", %{conn: conn, user: user} do
-      create_conn =
-        post conn, Routes.video_path(conn, :create), video: @create_attrs
+      create_conn = post conn, Routes.video_path(conn, :create), video: @create_attrs
 
       assert %{id: id} = redirected_params(create_conn)
       assert redirected_to(create_conn) == Routes.video_path(create_conn, :show, id)
 
-      conn = get conn, Routes.video_path(conn, :show, id)
+      conn = get(conn, Routes.video_path(conn, :show, id))
       assert html_response(conn, 200) =~ "Show Video"
 
       assert Multimedia.get_video!(id).user_id == user.id
@@ -90,11 +90,9 @@ defmodule RumblWeb.VideoControllerTest do
     test "does not create video, renders errors when invalid", %{conn: conn, user: user} do
       count_before = video_count()
 
-      conn =
-        post conn, Routes.video_path(conn, :create), video: @invalid_attrs
+      conn = post conn, Routes.video_path(conn, :create), video: @invalid_attrs
       assert html_response(conn, 200) =~ "check the errors"
       assert video_count() == count_before
-
     end
   end
 end

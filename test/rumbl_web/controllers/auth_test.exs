@@ -12,7 +12,7 @@ defmodule RumblWeb.AuthTest do
   end
 
   test "authenticate_user halts when no current_user exists", %{conn: conn} do
-    conn = Auth.authenticate_user(conn,[])
+    conn = Auth.authenticate_user(conn, [])
     assert conn.halted
   end
 
@@ -37,6 +37,7 @@ defmodule RumblWeb.AuthTest do
 
   test "call places user from session into assigns", %{conn: conn} do
     user = user_fixture()
+
     conn =
       conn
       |> put_session(:user_id, user.id)
@@ -49,5 +50,4 @@ defmodule RumblWeb.AuthTest do
     conn = Auth.call(conn, Auth.init([]))
     assert conn.assigns.current_user == nil
   end
-
 end
