@@ -18,6 +18,10 @@ let Video = {
         let msgInput     = document.getElementById("msg-input")
         let postButton   = document.getElementById("msg-submit")
         let vidChannel   = socket.channel("videos:" + videoId)
+
+        vidChannel.join()
+            .receive("ok", resp => console.log("joined the video channel", resp))
+            .receive("error", resp => console.log("jpin failed", resp))
     }
 }
 export default Video
