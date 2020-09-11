@@ -17,7 +17,10 @@ let Video = {
         let msgContainer = document.getElementById("msg-container")
         let msgInput     = document.getElementById("msg-input")
         let postButton   = document.getElementById("msg-submit")
-        let vidChannel   = socket.channel("videos:" + videoId)
+        let lastSeemId = 0
+        let vidChannel   = socket.channel("videos:" + videoId,() => {
+            return {lastSeemId: lastSeemId}
+        })
 
         postButton.addEventListener("click", e => {
             let payload = {body: msgInput.value, at: Player.getCurrentTime()}
@@ -27,6 +30,7 @@ let Video = {
         })
 
         vidChannel.on("new_annotation", (resp) => {
+            lastSeemId = resp.id
             this.renderAnnotation(msgContainer, resp)
         })
 
@@ -38,6 +42,8 @@ let Video = {
         })
         vidChannel.join()
             .receive("ok", resp => {
+                let ids = resp.annotations.map(ann => ann.id)
+                if(ids.length > 0){ lastSeemId = Math.max(...ids) }
                 this.scheduleMessages(msgContainer, resp.annotations)
             })
             .receive("error", resp => console.log("joined failed", resp))
