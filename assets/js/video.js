@@ -19,10 +19,35 @@ let Video = {
         let postButton   = document.getElementById("msg-submit")
         let vidChannel   = socket.channel("videos:" + videoId)
 
-        vidChannel.on("ping", ({count}) => console.log("PING",count))
+        postButton.addEventListener("click", e => {
+            let payload = {body: msgInput.value, at: Player.getCurrentTime()}
+            vidChannel.push("new_annotation", payload)
+                .receive("error", e => console.log(e))
+            msgInput.value = ""
+        })
+
+        vidChannel.on("new_annotation", (resp) => {
+            this.renderAnnotation(msgContainer, resp)
+        })
+
         vidChannel.join()
             .receive("ok", resp => console.log("joined the video channel", resp))
-            .receive("error", resp => console.log("jpin failed", resp))
+            .receive("error", resp => console.log("joined failed", resp))
+    },
+    esc(str){
+      let div = document.createElement("div")
+      div.appendChild(document.createTextNode(str))
+      return div.innerHTML
+    },
+    renderAnnotation(msgConteiner,{user, body, at}){
+        let template = document.createElement("div")
+        template.innerHTML =`
+        <a href="#" data-seek="${this.esc(at)}">
+            <b>${this.esc(user.username)}</b>: ${this.esc(body)}
+        </a>
+        `
+        msgConteiner.appendChild(template)
+        msgConteiner.scrollTop = msgConteiner.scrollHeight
     }
 }
 export default Video
