@@ -141,6 +141,10 @@ defmodule Rumbl.Multimedia do
     |> Repo.insert()
   end
 
+  def list_annotations do
+    Repo.all(Annotation)
+  end
+
   def list_annotations(%Video{} = video) do
     Repo.all(
       from a in Ecto.assoc(video, :annotations),
