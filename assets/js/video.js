@@ -1,4 +1,5 @@
 import Player from "./player";
+import {Presence} from "phoenix/assets/js/phoenix";
 
 let Video = {
     init(socket, element) {
@@ -17,11 +18,20 @@ let Video = {
         let msgContainer = document.getElementById("msg-container")
         let msgInput     = document.getElementById("msg-input")
         let postButton   = document.getElementById("msg-submit")
-        let lastSeemId = 0
+        let userList     = document.getElementById("user-list")
+        let lastSeemId   = 0
         let vidChannel   = socket.channel("videos:" + videoId,() => {
             return {lastSeemId: lastSeemId}
         })
 
+        let presence = new Presence(vidChannel)
+
+        presence.onSync(() => {
+            userList.innerHTML = presence.list((id, {metas: [first, ...rest]}) => {
+                let count = rest.length + 1
+                return `<li>${id}: (${count})</li>`
+            }).join("")
+        })
         postButton.addEventListener("click", e => {
             let payload = {body: msgInput.value, at: Player.getCurrentTime()}
             vidChannel.push("new_annotation", payload)
